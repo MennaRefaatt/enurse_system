@@ -1,11 +1,6 @@
 flutter_native_splash:
+  # IOS & Android < 12
   color: "#ffffff"
-  image: "assets/images/logoproject.png"
-  android_10:
-    image: "assets/images/logoproject.png"
-    color: "#ffffff"
-
+  image: assets/images/logoproject.jpg
   android_12:
-
-   color: "#ffffff"
-
+    color: "#ffffff"
