@@ -1,0 +1,26 @@
+part of 'doctor_and_nurse_patient_notes_view_cubit.dart';
+
+@immutable
+sealed class DoctorAndNursePatientNotesViewState {}
+
+final class DoctorAndNursePatientNotesViewInitial extends DoctorAndNursePatientNotesViewState {}
+
+
+class GetDoctorAndNursePatientNotesViewLoadingState extends DoctorAndNursePatientNotesViewState {}
+
+class GetDoctorAndNursePatientNotesViewSuccessState extends DoctorAndNursePatientNotesViewState {}
+
+class GetDoctorAndNursePatientNotesViewFailureState extends DoctorAndNursePatientNotesViewState {
+  final String errorMessage;
+  GetDoctorAndNursePatientNotesViewFailureState(this.errorMessage);
+}
+
+
+class DeleteDoctorAndNursePatientNotesViewLoadingState extends DoctorAndNursePatientNotesViewState {}
+
+class DeleteDoctorAndNursePatientNotesViewSuccessState extends DoctorAndNursePatientNotesViewState {}
+
+class DeleteDoctorAndNursePatientNotesViewFailureState extends DoctorAndNursePatientNotesViewState {
+  final String errorMessage;
+  DeleteDoctorAndNursePatientNotesViewFailureState(this.errorMessage);
+}

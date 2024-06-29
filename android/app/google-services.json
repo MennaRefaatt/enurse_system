@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "581581306667",
+    "firebase_url": "https://nurse-assistant-system-default-rtdb.firebaseio.com",
+    "project_id": "nurse-assistant-system",
+    "storage_bucket": "nurse-assistant-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581581306667:android:75c0c443293b8e2e83636e",
+        "android_client_info": {
+          "package_name": "com.enurse_system.enurse_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJDxd9eUZdnbEY3zuTK_g5_zNdBzf2Yhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
