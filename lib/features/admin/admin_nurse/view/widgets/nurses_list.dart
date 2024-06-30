@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enurse_system/core/style/colors/colors.dart';
 import 'package:enurse_system/core/utils/safe_print.dart';
@@ -5,6 +6,7 @@ import 'package:enurse_system/features/admin/personal_Info/view/personal_info.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../../../../core/utils/snack_bar_app.dart';
 import '../../../manager/admin_cubit.dart';
 
 class NursesList extends StatefulWidget {
@@ -30,7 +32,7 @@ class _NursesListState extends State<NursesList> {
   Widget build(BuildContext context) {
     return BlocBuilder<AdminCubit, AdminState>(builder: (context, state) {
       if (state is AdminNurseLoadingState) {
-        return CircularProgressIndicator(
+        return const CircularProgressIndicator(
           color: lightPurpleColor,
         );
       }
@@ -44,7 +46,7 @@ class _NursesListState extends State<NursesList> {
               padding:  EdgeInsets.only(top: 20.sp, left: 10.sp, right: 10.sp),
               child: Row(
                 children: [
-                  ImageIcon(AssetImage("assets/icons/adminIcon.png")),
+                  const ImageIcon(AssetImage("assets/icons/adminIcon.png")),
                   Text(
                     "  Nurses ",
                     style: TextStyle(
@@ -75,7 +77,7 @@ class _NursesListState extends State<NursesList> {
                           nurses.name,
                           style: TextStyle(fontSize: 18.sp),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Row(
                           children: [
                             InkWell(
@@ -92,26 +94,15 @@ class _NursesListState extends State<NursesList> {
                                             age: nurses.age,
                                             email:nurses.email)));
                               },
-                              child: ImageIcon(AssetImage(
+                              child: const ImageIcon(AssetImage(
                                   "assets/icons/AdminProfileIcon.png")),
                             ),
                             SizedBox(
                               width:5.w,
                             ),
                             InkWell(
-                              onTap: () async {
-                                await FirebaseFirestore.instance
-                                    .collection("users")
-                                    .doc(nurses.id)
-                                    .delete()
-                                    .then(
-                                      (doc) =>
-                                      safePrint("Document deleted"),
-                                  onError: (e) => safePrint(
-                                      "Error updating document $e"),
-                                );
-                              },
-                              child: ImageIcon(
+                              onTap: () => awesomeDialog(message: 'Are you sure you want to delete this nurse?', index: index),
+                              child: const ImageIcon(
                                 AssetImage(
                                     "assets/icons/adminRemoveIcon.png"),
                                 color: Colors.red,
@@ -130,5 +121,22 @@ class _NursesListState extends State<NursesList> {
           style: TextStyle(color: lightPurpleColor, fontSize: 18.sp),);
       }
     });
+  }
+
+  void awesomeDialog({required String message,required int index}) {
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.question,
+        animType: AnimType.rightSlide,
+        btnCancelColor: Colors.red[900],
+
+        // title: message,
+        desc: message,
+        btnCancelOnPress: () {},
+        btnOkOnPress:() async{
+          widget.cubit.deleteNurse(widget.cubit.nurseListModel[index]);
+          snackBar(context, "deleted successfully", lightPurpleColor);
+        }
+    ).show();
   }
 }

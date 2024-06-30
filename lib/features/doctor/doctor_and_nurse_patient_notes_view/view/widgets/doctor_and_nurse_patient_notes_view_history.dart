@@ -28,92 +28,72 @@ class _DoctorPatientNotesViewHistory
     return BlocBuilder<DoctorAndNursePatientNotesViewCubit,
         DoctorAndNursePatientNotesViewState>(builder: (context, state) {
       if (state is GetDoctorAndNursePatientNotesViewLoadingState) {
-        return CircularProgressIndicator(
+        return const CircularProgressIndicator(
           color: lightPurpleColor,
         );
       } else {
         return widget.doctorAndNursePatientNotesViewCubit.notes.isNotEmpty ?
           ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.doctorAndNursePatientNotesViewCubit.notes.length,
           itemBuilder: (context, index) {
-            return Slidable(
-              startActionPane: ActionPane(
-                  motion: ScrollMotion(),
-                  children: [
-                    Visibility(
-                      visible: widget.type == "1" ,
-                      child: SlidableAction(
-                        borderRadius: BorderRadius.circular(20.sp),
-                        padding: EdgeInsets.all(10.sp),
-                        onPressed: (context) {
-                          awesomeDialog(message: "Are you sure to delete this note?", index:index, );
+            return Container(
+              margin: EdgeInsets.all(15.sp),
+              padding: EdgeInsets.all(15.sp),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.sp),
+                color: greyColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: greyColor.withOpacity(0.5),
+                    blurRadius: 7,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 10), // Shadow position
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      MyTextFormField(
+                        showPrefix: false,
+                        enabled: false,
+                        maxLines: 10,
+                        minLines: 5,
+                        filled: false,
+                        validators: (value) {
+                          if (value!.isEmpty) {
+                            return 'please enter notes';
+                          }
+                          return null;
                         },
-                        backgroundColor: Colors.red[900]!,
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete,
-                        label: 'Delete',
+                        controller: widget.doctorAndNursePatientNotesViewCubit
+                            .displayContentController,
+                        textInputAction: TextInputAction.next,
+                        textInputType: TextInputType.text,
+                        title: widget.doctorAndNursePatientNotesViewCubit
+                            .notes[index].date,
+                        hint: widget.doctorAndNursePatientNotesViewCubit
+                            .notes[index].content,
+                        isPassword: false,
+                        prefixIcon: Icons.edit,
                       ),
-                    ),
-                  ]),
-              child: Container(
-                margin: EdgeInsets.all(15.sp),
-                padding: EdgeInsets.all(15.sp),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.sp),
-                  color: greyColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: greyColor.withOpacity(0.5),
-                      blurRadius: 7,
-                      spreadRadius: 1,
-                      offset: const Offset(0, 10), // Shadow position
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        MyTextFormField(
-                          showPrefix: false,
-                          enabled: false,
-                          maxLines: 10,
-                          minLines: 5,
-                          filled: false,
-                          validators: (value) {
-                            if (value!.isEmpty) {
-                              return 'please enter notes';
-                            }
-                            return null;
-                          },
-                          controller: widget.doctorAndNursePatientNotesViewCubit
-                              .displayContentController,
-                          textInputAction: TextInputAction.next,
-                          textInputType: TextInputType.text,
-                          title: widget.doctorAndNursePatientNotesViewCubit
-                              .notes[index].date,
-                          hint: widget.doctorAndNursePatientNotesViewCubit
-                              .notes[index].content,
-                          isPassword: false,
-                          prefixIcon: Icons.edit,
-                        ),
-                        Visibility(
-                          visible: widget.type== "1",
-                          child: IconButton(onPressed: (){
-                            awesomeDialog(message: "Are you sure to delete this note?", index:index, );
-                          }, icon: Icon(Icons.delete,
-                            color: Colors.red[900],)),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 3.h,
-                    ),
-                  ],
-                ),
+                      Visibility(
+                        visible: widget.type== "1",
+                        child: IconButton(onPressed: (){
+                          awesomeDialog(message: "Are you sure to delete this note?", index:index, );
+                        }, icon: Icon(Icons.delete,
+                          color: Colors.red[900],)),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 3.h,
+                  ),
+                ],
               ),
             );
           },

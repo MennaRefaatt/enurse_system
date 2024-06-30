@@ -24,7 +24,7 @@ class _FamilyHomeState extends State<FamilyHome> {
   @override
   void initState() {
     cubit.getMedications();
-    cubit.getDailyReport();
+    cubit.getDailyReport(patientId: PreferenceUtils.getString(PrefKeys.patientId));
     super.initState();
   }
 
@@ -39,7 +39,7 @@ class _FamilyHomeState extends State<FamilyHome> {
           // }
         },
         child: Scaffold(
-          body: Container(
+          body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -68,7 +68,7 @@ class _FamilyHomeState extends State<FamilyHome> {
                                 color: Colors.white),
                           ),
                           Text(
-                            'family member/ ${PreferenceUtils.getString(PrefKeys.name)}',
+                            'Family Member/ ${PreferenceUtils.getString(PrefKeys.name)}',
                             style: TextStyle(
                                 fontSize: 18.sp,
                                 fontWeight: FontWeight.w300,
@@ -93,55 +93,66 @@ class _FamilyHomeState extends State<FamilyHome> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       PatientRecord("Daily Report", () {
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(32.0))),
-                            backgroundColor: lightPurpleColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.sp)),
+                            backgroundColor: greyColor,
                             scrollable: true,
                             actions: <Widget>[
-                              Form(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Daily Report",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 23.sp)),
-                                    ListView.builder(
-                                      itemCount: cubit.dailyReport.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Container(
-                                          color: Colors.white,
-                                          height: 40.sp,
-                                          child: Text(
-                                            cubit.dailyReport[index].content,
+                               Column(
+                                 crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text("Daily Report",
                                             style: TextStyle(
-                                                fontSize: 14.sp,
-                                                fontWeight: FontWeight.w400),
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 23.sp)),
+                                        cubit.dailyReport.isNotEmpty
+                                            ? SizedBox(
+                                          height: 50.h,
+                                          width: 70.w,
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: cubit.dailyReport.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              return Container(
+                                                margin: EdgeInsets.all(10.sp),
+                                                padding: EdgeInsets.all(15.sp),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.sp)),
+                                                child: Text(
+                                                  cubit.dailyReport[index]
+                                                      .content,
+                                                  style: TextStyle(
+                                                      fontSize: 17.sp,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: 6.h,
-                                      width: double.infinity,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                        ) : Text(
+                                            "no daily report entered yet",
+                                            style: TextStyle(
+                                                color: Colors.black, fontSize: 20.sp),
+                                            ),
+                                      ],
+                                    )
+
                             ],
                           ),
                         );
                       }),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       Row(
@@ -151,24 +162,24 @@ class _FamilyHomeState extends State<FamilyHome> {
                             height: 24,
                             width: 24,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 15,
                           ),
-                          Text(
+                          const Text(
                             "Medication Plan",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Row(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(
@@ -203,7 +214,7 @@ class _FamilyHomeState extends State<FamilyHome> {
                           ],
                         ),
                       ),
-                      Divider(
+                      const Divider(
                         endIndent: 15,
                         indent: 15,
                         color: Color(0XFFE0E9F4),
@@ -240,7 +251,7 @@ class _FamilyHomeState extends State<FamilyHome> {
       btnOkOnPress: () => setState(() {
         FirebaseAuth.instance.signOut().then((value) async {
           await PreferenceUtils.clear();
-          pushReplacement(context, OnBoarding());
+          pushReplacement(context, const OnBoarding());
         });
       }),
     ).show();

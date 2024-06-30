@@ -35,11 +35,14 @@ class PatientInformationCubit extends Cubit<PatientInformationState> {
   }
 
   void getDailyReport({required String patientId}) {
-    emit(PatientInformationLoadingState());
+    emit(DailyReportLoadingState());
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
+
     fireStore
         .collection("dailyReport")
-        //.doc(DateTime(now.year, now.month, now.day).toString())
-        .where("date", isGreaterThanOrEqualTo:today, isLessThan:tomorrow)
+        .where("date", isGreaterThanOrEqualTo: today, isLessThan: tomorrow)
         .where("patient_id", isEqualTo: patientId)
         .orderBy('date', descending: true)
         .startAt([today])
@@ -55,5 +58,4 @@ class PatientInformationCubit extends Cubit<PatientInformationState> {
       emit(PatientInformationSuccessState());
     });
   }
-
 }

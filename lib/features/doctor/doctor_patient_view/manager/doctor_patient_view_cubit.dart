@@ -9,10 +9,10 @@ class DoctorPatientViewCubit extends Cubit<DoctorPatientViewState> {
   DoctorPatientViewCubit() : super(DoctorPatientViewInitial());
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
-final now = DateTime.now();
+  final now = DateTime.now();
   TextEditingController contentController = TextEditingController();
   void saveDailyNotes({required String patientId}) {
-    emit(DoctorPatientViewLoadingState());
+    emit(DailyReportLoading());
     DailyReportModel dailyReportModel = DailyReportModel(
       content: contentController.text,
       date:DateTime(now.year, now.month, now.day),
@@ -24,7 +24,7 @@ final now = DateTime.now();
         .set(dailyReportModel.toMap())
         .then((value) {
       contentController.clear();
-      emit(DoctorPatientViewSuccessState());
+      emit(DailyReportSuccess());
     });
   }
 }

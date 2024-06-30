@@ -7,7 +7,6 @@ import 'package:enurse_system/features/nurse/patient_information_screen/manager/
 import 'package:enurse_system/features/nurse/vital_Signs/view/page/vital_signs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -15,7 +14,7 @@ import '../../../../core/style/colors/colors.dart';
 import '../manager/patient_information_state.dart';
 
 class PatentInformationScreen extends StatefulWidget {
-  PatentInformationScreen(
+  const PatentInformationScreen(
       {super.key,
       required this.docID,
       required this.name,
@@ -97,7 +96,7 @@ class _PatentInformationScreenState extends State<PatentInformationScreen> {
                                         children: [
                                           Row(
                                             children: [
-                                              Icon(
+                                              const Icon(
                                                 Icons.stacked_bar_chart,
                                                 color: lightPurpleColor,
                                               ),
@@ -121,23 +120,23 @@ class _PatentInformationScreenState extends State<PatentInformationScreen> {
                                               vital_text(
                                                   stream: firebaseService
                                                       .getTemperatureStream(),
-                                                  color: Color(0XFFFE5775),
+                                                  color: const Color(0XFFFE5775),
                                                   title: "Temperature"),
                                               vital_text(
                                                   stream: firebaseService
                                                       .getPulseStream(),
-                                                  color: Color(0XFFF3A53F),
+                                                  color: const Color(0XFFF3A53F),
                                                   title: "Pulse"),
                                               vital_text(
                                                   stream: firebaseService
                                                       .getOxygenStream(),
-                                                  color: Color(0XFF8CB9BD),
+                                                  color: const Color(0XFF8CB9BD),
                                                   title: "Oxygen")
                                             ],
                                           ),
                                           Row(
                                             children: [
-                                              ImageIcon(AssetImage(
+                                              const ImageIcon(AssetImage(
                                                   "assets/icons/chart_icon.png")),
                                               SizedBox(
                                                 width: 2.w,
@@ -229,8 +228,7 @@ class _PatentInformationScreenState extends State<PatentInformationScreen> {
                                           backgroundColor: greyColor,
                                           scrollable: true,
                                           actions: <Widget>[
-                                            cubit.dailyReport.isNotEmpty
-                                                ? Column(
+                                             Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .center,
@@ -243,6 +241,8 @@ class _PatentInformationScreenState extends State<PatentInformationScreen> {
                                                                   FontWeight
                                                                       .w500,
                                                               fontSize: 23.sp)),
+                                                      cubit.dailyReport.isNotEmpty
+                                                          ?
                                                       SizedBox(
                                                         height: 50.h,
                                                         width: 70.w,
@@ -284,15 +284,19 @@ class _PatentInformationScreenState extends State<PatentInformationScreen> {
                                                             );
                                                           },
                                                         ),
-                                                      ),
+                                                      )
+                                                          : Align(
+                                                        alignment: Alignment.center,
+                                                            child: Text(
+                                                              "no daily report entered yet",
+                                                              style: TextStyle(
+                                                                  color: Colors.black,
+                                                                  fontSize: 20.sp),
+                                                              ),
+                                                          ),
                                                     ],
                                                   )
-                                                : Text(
-                                                    "no daily report entered yet",
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 20.sp),
-                                                  ),
+
                                           ],
                                         ),
                                       );
@@ -324,7 +328,7 @@ class _PatentInformationScreenState extends State<PatentInformationScreen> {
                             ),
                           ],
                         )
-                      : Center(
+                      : const Center(
                           child: CircularProgressIndicator(
                           color: lightPurpleColor,
                         ));
@@ -362,7 +366,7 @@ class _PatentInformationScreenState extends State<PatentInformationScreen> {
                 }
 
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(
                       color: lightPurpleColor,
                     ),

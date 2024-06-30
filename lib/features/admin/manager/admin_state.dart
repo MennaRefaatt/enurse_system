@@ -50,5 +50,23 @@ class GetRequestStateFailure extends AdminState{
   GetRequestStateFailure(this.message);
 }
 
+class DeleteNurseLoadingState extends AdminState {}
+
+class DeleteNurseSuccessState extends AdminState {}
+
+class DeleteNurseFailureState extends AdminState {
+  final String errorMessage;
+  DeleteNurseFailureState(this.errorMessage);
+}
+
+class DeleteDoctorLoadingState extends AdminState {}
+
+class DeleteDoctorSuccessState extends AdminState {}
+
+class DeleteDoctorFailureState extends AdminState {
+  final String errorMessage;
+  DeleteDoctorFailureState(this.errorMessage);
+}
+
 
 

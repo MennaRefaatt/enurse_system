@@ -16,12 +16,12 @@ class FamilyHomeCubit extends Cubit<FamilyHomeState> {
   List<MedicationsModel> medicationModel = [];
   final fireStore = FirebaseFirestore.instance;
   List<DailyReportModel> dailyReport = [];
-  final now = DateTime.now();
-
+  // final now = DateTime.now();
+  // late DateTime today = DateTime(now.year, now.month, now.day);
+  // late DateTime tomorrow = today.add(const Duration(days: 1));
+  // Add 1 day for the end boundary
   getMedications() {
     emit(FamilyHomeLoadingState());
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-
     firestore.collection("set-medications").snapshots().listen((value) {
       medicationModel.clear();
       for (var documents in value.docs) {
@@ -36,11 +36,18 @@ class FamilyHomeCubit extends Cubit<FamilyHomeState> {
 
   //==================================================
 
-  getDailyReport() {
+  void getDailyReport({required String patientId}) {
     emit(FamilyHomeLoadingState());
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
+
     fireStore
         .collection("dailyReport")
-        .where("date", isEqualTo:DateFormat.yMEd().add_jms().format(DateTime.now()))
+        .where("date", isGreaterThanOrEqualTo: today, isLessThan: tomorrow)
+        //.where("patient_id", isEqualTo: patientId)
+        .orderBy('date', descending: true)
+        .startAt([today])
         .snapshots()
         .listen((value) {
       dailyReport.clear();
@@ -48,9 +55,9 @@ class FamilyHomeCubit extends Cubit<FamilyHomeState> {
         final dailyReportModel = DailyReportModel.fromMap(document.data());
         dailyReport.add(dailyReportModel);
       }
+      //safePrint(DateTime(now.year, now.month, now.day).toString());
       safePrint(dailyReport.length);
       emit(FamilyHomeSuccessState());
     });
   }
-
 }

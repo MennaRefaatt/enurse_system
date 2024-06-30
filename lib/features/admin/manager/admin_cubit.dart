@@ -6,8 +6,7 @@ import 'package:enurse_system/features/admin/model/admin_model.dart';
 import 'package:enurse_system/features/authentication/register/requestState.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:meta/meta.dart';
-
+import 'package:flutter/cupertino.dart';
 import '../admin_doctors/model/doctor_model.dart';
 import '../admin_nurse/model/nurse_list_model.dart';
 part 'admin_state.dart';
@@ -26,7 +25,7 @@ class AdminCubit extends Cubit<AdminState> {
     emit(AdminNurseLoadingState());
     fireStore
         .collection("users")
-        .where("type", isEqualTo: "1")
+        .where("type", isEqualTo: "1").where("requestState", isEqualTo: RequestState.accepted.name)
         .snapshots()
         .listen((value) {
       nurseListModel.clear();
@@ -45,7 +44,7 @@ class AdminCubit extends Cubit<AdminState> {
     emit(AdminDoctorLoadingState());
     fireStore
         .collection("users")
-        .where("type", isEqualTo: "0")
+        .where("type", isEqualTo: "0").where("requestState", isEqualTo:RequestState.accepted.name )
         .snapshots()
         .listen((value) {
       doctorListModel.clear();
@@ -79,7 +78,30 @@ class AdminCubit extends Cubit<AdminState> {
       //Future.delayed(Duration(seconds: 2));
     });
   }
-
+  Future<void> deleteDoctor( DoctorDataModel doctors) async{
+  emit(DeleteDoctorLoadingState());
+  try{
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(doctors.id)
+        .delete();
+    emit(DeleteDoctorSuccessState());
+  }catch(e){
+    emit(DeleteDoctorFailureState(e.toString()));
+  }
+}
+  Future<void> deleteNurse( NurseDataModel nurses) async {
+    emit(DeleteNurseLoadingState());
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(nurses.id)
+          .delete();
+      emit(DeleteNurseSuccessState());
+    } catch (e) {
+      emit(DeleteNurseFailureState(e.toString()));
+    }
+  }
   Future changeRequest(
       {required String id,
       required bool accepted,

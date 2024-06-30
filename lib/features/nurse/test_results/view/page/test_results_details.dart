@@ -94,7 +94,7 @@ class _TestResultsDetailsState extends State<TestResultsDetails> {
               children: [
                 GridView.builder(
                   shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
                   itemBuilder: (context, index) {
                     return Container(

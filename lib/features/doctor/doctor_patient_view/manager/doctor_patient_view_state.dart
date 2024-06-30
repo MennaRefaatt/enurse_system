@@ -15,3 +15,17 @@ class DoctorPatientViewFailureState extends DoctorPatientViewState{
 
   DoctorPatientViewFailureState(this.errorMessage);
 }
+
+
+class DailyReportLoading extends DoctorPatientViewState{}
+
+class DailyReportSuccess extends DoctorPatientViewState{}
+
+class DailyReportError extends DoctorPatientViewState{
+  final String error;
+
+   DailyReportError(this.error);
+
+  @override
+  List<Object> get props => [error];
+}

@@ -23,7 +23,7 @@ class _AdminDoctorsState extends State<AdminDoctors> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            AdminDoctorsAppBar(),
+            const AdminDoctorsAppBar(),
             DoctorsList(cubit: cubit,),
             Divider(
               height: 1.h,

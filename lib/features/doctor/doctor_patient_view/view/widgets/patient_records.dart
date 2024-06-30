@@ -13,6 +13,7 @@ import '../../../../../core/utils/navigators/navigators.dart';
 import '../../../../../core/utils/snack_bar_app.dart';
 import '../../../../../core/widgets/app_text_field.dart';
 import '../../../set_medication/view/page/set_medications.dart';
+import '../../model/daily_report_model.dart';
 
 class PatientRecords extends StatefulWidget {
   const PatientRecords(
@@ -315,9 +316,9 @@ class _PatientRecordsState extends State<PatientRecords> {
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        widget.doctorPatientViewCubit
-                                            .saveDailyNotes(
-                                                patientId: widget.patientId);
+                                        widget.doctorPatientViewCubit.saveDailyNotes(
+                                          patientId: widget.patientId,
+                                        );
                                         snackBar(
                                             context, "Added", lightPurpleColor);
                                       },

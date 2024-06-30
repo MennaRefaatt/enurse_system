@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enurse_system/core/style/colors/colors.dart';
 import 'package:enurse_system/core/utils/safe_print.dart';
@@ -6,10 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../../../core/utils/snack_bar_app.dart';
 import '../../../manager/admin_cubit.dart';
 
 class DoctorsList extends StatefulWidget {
-  DoctorsList({
+  const DoctorsList({
     super.key,
     required this.cubit,
   });
@@ -31,11 +33,11 @@ class _DoctorsListState extends State<DoctorsList> {
   Widget build(BuildContext context) {
     return BlocBuilder<AdminCubit, AdminState>(builder: (context, state) {
       if (state is AdminDoctorLoadingState) {
-        return CircularProgressIndicator(
+        return const CircularProgressIndicator(
           color: lightPurpleColor,
         );
       } else {
-        return widget.cubit.doctorListModel.isNotEmpty ?
+        return
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -43,7 +45,7 @@ class _DoctorsListState extends State<DoctorsList> {
               padding:  EdgeInsets.only(top: 20.sp, left: 10.sp, right: 10.sp),
               child: Row(
                 children: [
-                  ImageIcon(AssetImage("assets/icons/adminIcon.png")),
+                  const ImageIcon(AssetImage("assets/icons/adminIcon.png")),
                   Text(
                     "  Doctors ",
                     style: TextStyle(
@@ -54,6 +56,7 @@ class _DoctorsListState extends State<DoctorsList> {
                 ],
               ),
             ),
+            widget.cubit.doctorListModel.isNotEmpty ?
             ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -74,7 +77,7 @@ class _DoctorsListState extends State<DoctorsList> {
                           doctors.name,
                           style: TextStyle(fontSize: 18.sp),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Row(
                           children: [
                             InkWell(
@@ -93,26 +96,15 @@ class _DoctorsListState extends State<DoctorsList> {
                                             email:doctors.email))
                                 );
                               },
-                              child: ImageIcon(AssetImage(
+                              child: const ImageIcon(AssetImage(
                                   "assets/icons/AdminProfileIcon.png")),
                             ),
                             SizedBox(
                               width:5.w,
                             ),
                             InkWell(
-                              onTap: () async {
-                                await FirebaseFirestore.instance
-                                    .collection("users")
-                                    .doc(doctors.id)
-                                    .delete()
-                                    .then(
-                                      (doc) =>
-                                      safePrint("Document deleted"),
-                                  onError: (e) => safePrint(
-                                      "Error updating document $e"),
-                                );
-                              },
-                              child: ImageIcon(
+                              onTap: () => awesomeDialog(message: "Are you sure you want to delete this doctor?",index: index),
+                              child: const ImageIcon(
                                 AssetImage(
                                     "assets/icons/adminRemoveIcon.png"),
                                 color: Colors.red,
@@ -124,11 +116,27 @@ class _DoctorsListState extends State<DoctorsList> {
                     ),
                   );
                 })
+          : Text("no doctors are registered", style: TextStyle(color: lightPurpleColor, fontSize: 18.sp),)
 
-          ],
-        )
-            : Text("no doctors are registered", style: TextStyle(color: lightPurpleColor, fontSize: 18.sp),);
+
+      ],
+        );
       }
     });
+  }
+  void awesomeDialog({required String message,required int index}) {
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.question,
+        animType: AnimType.rightSlide,
+        btnCancelColor: Colors.red[900],
+        // title: message,
+        desc: message,
+        btnCancelOnPress: () {},
+        btnOkOnPress:() async{
+          widget.cubit.deleteDoctor(widget.cubit.doctorListModel[index]);
+          snackBar(context, "deleted successfully", lightPurpleColor);
+        }
+    ).show();
   }
 }

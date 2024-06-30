@@ -85,7 +85,7 @@ class _DAndNProfileState extends State<DAndNProfile> {
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
                                     saveUserData();
-                                    Future.delayed( Duration(seconds: 2), () {
+                                    Future.delayed(  const Duration(seconds: 2), () {
                                       displayToast("updated");
 
                                     });
@@ -345,7 +345,7 @@ class _DAndNProfileState extends State<DAndNProfile> {
       // push(context, LoginScreen(type: widget.type,));
     } else if (state is DAndNProfileUpdateSuccessState) {
       if(PreferenceUtils.getString(PrefKeys.type) == "0"){
-        pushNamedAndRemoveUntil(context, DoctorHome());
+        pushNamedAndRemoveUntil(context, const DoctorHome());
       }
       if(PreferenceUtils.getString(PrefKeys.type) == "1"){
         pushNamedAndRemoveUntil(context, NHomeScreen(type: '',));
@@ -360,7 +360,7 @@ class _DAndNProfileState extends State<DAndNProfile> {
         msg: message,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.red[900],
         textColor: Colors.white,
         fontSize: 16.0);
   }

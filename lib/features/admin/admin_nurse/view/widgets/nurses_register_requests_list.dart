@@ -32,8 +32,7 @@ class _NursesRegisterRequestsListState
       builder: (context, state) {
         return Container(
             margin: EdgeInsets.all(15.sp),
-            child: widget.cubit.requestedDataModel.isNotEmpty
-                ? Column(
+            child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -44,12 +43,12 @@ class _NursesRegisterRequestsListState
                       BlocBuilder<AdminCubit, AdminState>(
                         builder: (context, state) {
                           if (state is GetRequestStateLoading) {
-                            return CircularProgressIndicator(
+                            return const CircularProgressIndicator(
                               color: lightPurpleColor,
                             );
-                          } else {
+                          } else if ( widget.cubit.requestedDataModel.isNotEmpty) {
                             return ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: widget.cubit.requestedDataModel.length,
                               itemBuilder: (context, index) {
@@ -83,15 +82,19 @@ class _NursesRegisterRequestsListState
                                     });
                               },
                             );
+                          } else if ( widget.cubit.requestedDataModel.isEmpty) {
+                            return Center(
+                                child: Text(
+                              "no requests yet",
+                              style: TextStyle(color: lightPurpleColor, fontSize: 18.sp),
+                            ));
+                            } else {
+                            return const SizedBox();
+                            }
                           }
-                        },
                       ),
-                    ],
-                  )
-                : Text(
-                    "no requests yet",
-                    style: TextStyle(color: lightPurpleColor, fontSize: 18.sp),
-                  ));
+                ])
+        );
       },
     );
   }
